@@ -81,9 +81,9 @@ module.exports = {
                   date: node.frontmatter.date,
                   url: site.siteMetadata.siteUrl + node.fields.slug,
                   guid: site.siteMetadata.siteUrl + node.fields.slug,
-                  custom_elements: [{ "content:encoded": node.html }],
-                })
-              })
+                  custom_elements: [{ 'content:encoded': node.html }],
+                });
+              });
             },
             query: `
               {
@@ -104,7 +104,7 @@ module.exports = {
                 }
               }
             `,
-            output: "/rss.xml",
+            output: '/rss.xml',
           },
         ],
       },
@@ -127,4 +127,4 @@ module.exports = {
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
   ],
-}
+};
