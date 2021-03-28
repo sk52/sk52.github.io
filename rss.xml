@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Code with Sam]]></title><description><![CDATA[A place to document and share my learning journey.]]></description><link>https://sk52.github.io/codewithsam</link><generator>GatsbyJS</generator><lastBuildDate>Sun, 28 Mar 2021 16:16:06 GMT</lastBuildDate><item><title><![CDATA[Deploying a Gatsby Site to GitHub Pages Using GitHub Actions CI/CD]]></title><description><![CDATA[In this post I will talk about setting up GitHub Actions CI/CD to automatically build and deploy my Gatsby site to GitHub Pages when I push…]]></description><link>https://sk52.github.io/codewithsam/setting-up-ci-cd/</link><guid isPermaLink="false">https://sk52.github.io/codewithsam/setting-up-ci-cd/</guid><pubDate>Sun, 28 Mar 2021 15:37:00 GMT</pubDate><content:encoded>&lt;p&gt;In this post I will talk about setting up GitHub Actions CI/CD to automatically build and deploy my Gatsby site to GitHub Pages when I push any changes to the &lt;code class=&quot;language-text&quot;&gt;main&lt;/code&gt; branch. The post will cover:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;What I want to achieve with CI/CD, and why&lt;/li&gt;
+&lt;li&gt;How I set up CI/CD using GitHub Actions to deploy to GitHub Pages&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;What and Why&lt;/h2&gt;
+&lt;p&gt;Gatsby provides a simple set of &lt;a href=&quot;https://www.gatsbyjs.com/docs/how-to/previews-deploys-hosting/how-gatsby-works-with-github-pages/&quot;&gt;instructions&lt;/a&gt; which allow this deployment to be carried out manually by specifying a &lt;code class=&quot;language-text&quot;&gt;deploy&lt;/code&gt; command in the &lt;code class=&quot;language-text&quot;&gt;package.json&lt;/code&gt; and just running it locally. However, I’m keen to explore migrating from markdown blog posts to a headless CMS in the future, so this approach works with that in mind and provides the following benefits:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Allows me to automatically deploy changes when I merge PR’s to my &lt;code class=&quot;language-text&quot;&gt;main&lt;/code&gt; branch&lt;/li&gt;
+&lt;li&gt;It will allow me to setup some webhooks in future to easily trigger a new build and deploy when new content gets published in the CMS&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;How I set up CI/CD&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;Firstly I installed &lt;code class=&quot;language-text&quot;&gt;gh-pages&lt;/code&gt; by running &lt;code class=&quot;language-text&quot;&gt;npm install gh-pages --save&lt;/code&gt;, this package provides a way to publish the build files to a specified branch (defaults to &lt;code class=&quot;language-text&quot;&gt;gh-pages&lt;/code&gt; branch)&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Next I created a GitHub access token, this will allow repository access from the GitHub Actions workflow, needed to push changes to the &lt;code class=&quot;language-text&quot;&gt;gh-pages&lt;/code&gt; branch for deployment.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Navigate to GitHub -&gt; Settings -&gt; Developer Settings -&gt; Personal access tokens&lt;/li&gt;
+&lt;li&gt;Select “Generate new token”, create one which gives access to “repo” and save it with a descriptive name&lt;/li&gt;
+&lt;li&gt;Copy the value of this token&lt;/li&gt;
+&lt;li&gt;Navigate to the GitHub repository -&gt; Settings -&gt; Secrets&lt;/li&gt;
+&lt;li&gt;Select “New repository secret”&lt;/li&gt;
+&lt;li&gt;Paste the token as the Value, and set the name as &lt;code class=&quot;language-text&quot;&gt;GH_TOKEN&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Next I wrote two scripts in &lt;code class=&quot;language-text&quot;&gt;package.json&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;&amp;quot;deploy&amp;quot;: &amp;quot;gatsby build --prefix-paths &amp;amp;&amp;amp; gh-pages -d public&amp;quot;&lt;/code&gt; - this script allows deployment to be carried out manually&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;&amp;quot;deploy:ci&amp;quot;: &amp;quot;gatsby build --prefix-paths &amp;amp;&amp;amp; gh-pages -d public -r https://$GH_TOKEN@github.com/username/repo.git&amp;quot;&lt;/code&gt; - this script will be used by our GitHub Actions workflow, it uses the token created in the previous step&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Create a GitHub Actions workflow: &lt;code class=&quot;language-text&quot;&gt;.github/workflows/deploy.yml&lt;/code&gt; and add the following:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;yml&quot;&gt;&lt;pre class=&quot;language-yml&quot;&gt;&lt;code class=&quot;language-yml&quot;&gt;&lt;span class=&quot;token key atrule&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Gatsby Deploy
+
+&lt;span class=&quot;token key atrule&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token key atrule&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;token key atrule&quot;&gt;branches&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; main
+
+&lt;span class=&quot;token key atrule&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token key atrule&quot;&gt;GH_TOKEN&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; $&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; secrets.GH_TOKEN &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token key atrule&quot;&gt;jobs&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token key atrule&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;token key atrule&quot;&gt;runs-on&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; ubuntu&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;latest
+    &lt;span class=&quot;token key atrule&quot;&gt;steps&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token key atrule&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; GitHub Config
+        &lt;span class=&quot;token key atrule&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;token scalar string&quot;&gt;
+          git config --global user.email &quot;example@example.example&quot;
+          git config --global user.name &quot;example&quot;&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token key atrule&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Checkout
+        &lt;span class=&quot;token key atrule&quot;&gt;uses&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; actions/checkout@v2
+      &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token key atrule&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Install dependencies
+        &lt;span class=&quot;token key atrule&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;token scalar string&quot;&gt;
+          npm install&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token key atrule&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Deploy
+        &lt;span class=&quot;token key atrule&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; npm run deploy&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;ci&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol start=&quot;5&quot;&gt;
+&lt;li&gt;Replace the example username and email with your own details in the &lt;code class=&quot;language-text&quot;&gt;.yml&lt;/code&gt; file (alternatively, if you have privacy concerns, you can set these up as GitHub secrets too following the steps used above, simply replace the email and quotation marks with something like &lt;code class=&quot;language-text&quot;&gt;$EMAIL&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;And that’s it! Commit and push the changes to your &lt;code class=&quot;language-text&quot;&gt;main&lt;/code&gt; branch and it will trigger the workflow&lt;/li&gt;
+&lt;/ol&gt;</content:encoded></item><item><title><![CDATA[First Post]]></title><description><![CDATA[This is the first post on my new blog. The purpose of this blog is to document and share my learning journey. In this post I will cover…]]></description><link>https://sk52.github.io/codewithsam/first-post/</link><guid isPermaLink="false">https://sk52.github.io/codewithsam/first-post/</guid><pubDate>Sat, 27 Mar 2021 16:57:00 GMT</pubDate><content:encoded>&lt;p&gt;This is the first post on my new blog.&lt;/p&gt;
+&lt;p&gt;The purpose of this blog is to document and share my learning journey. In this post I will cover:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Introduction&lt;/li&gt;
+&lt;li&gt;Ideas going forward&lt;/li&gt;
+&lt;li&gt;Setting up a basic Gatsby blog using the &lt;a href=&quot;https://github.com/gatsbyjs/gatsby-starter-blog&quot;&gt;Gatsby Starter Blog&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;I’m a software engineer living and working in London, UK.&lt;/p&gt;
+&lt;p&gt;The first topic which I’ll be writing about is in fact about this very site - I’m keen to document the journey, starting with a basic Gatsby template and modifying it to suit my needs.&lt;/p&gt;
+&lt;h2&gt;Ideas&lt;/h2&gt;
+&lt;p&gt;Things that I’ve got in mind for future changes include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Deploying the site using GitHub Pages (if you’re reading this then it’s safe to assume this task is complete!)&lt;/li&gt;
+&lt;li&gt;Moving towards using a headless CMS rather than markdown for my blog posts&lt;/li&gt;
+&lt;li&gt;Setting up a basic CI/CD pipeline to suit my needs, likely GitHub Actions to begin with for easy deployment to GitHub Pages. Although I would like to extend this to handle auto redeploys on publishing new posts in the CMS of choice&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Setting up a basic Gatsby blog&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;The first step is to install the Gatsby CLI globally by running &lt;code class=&quot;language-text&quot;&gt;npm install -g gatsby-cli&lt;/code&gt; as documented at &lt;a href=&quot;https://www.gatsbyjs.com/docs/reference/gatsby-cli/&quot;&gt;www.gatsbyjs.com&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Next it’s as simple as running the Gatsby &lt;code class=&quot;language-text&quot;&gt;new&lt;/code&gt; command specifying which starter template to use. In this case, I used the blog starter by running the command &lt;code class=&quot;language-text&quot;&gt;gatsby new blog-site https://github.com/gatsbyjs/gatsby-starter-blog&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Once installed, &lt;code class=&quot;language-text&quot;&gt;gatsby develop&lt;/code&gt; will run the new blog locally on the default port 8000&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;It really is as simple as that, Gatsby makes it super quick and easy to get a basic template set up. To create new content just create a new folder in the &lt;code class=&quot;language-text&quot;&gt;content/blog&lt;/code&gt; and start writing in markdown. Gatsby will rebuild and your changes will be visible on localhost.&lt;/p&gt;</content:encoded></item></channel></rss>
