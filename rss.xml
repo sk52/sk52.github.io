@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Code with Sam]]></title><description><![CDATA[A place to document and share my learning journey.]]></description><link>https://sk52.github.io/codewithsam</link><generator>GatsbyJS</generator><lastBuildDate>Sun, 28 Mar 2021 16:16:06 GMT</lastBuildDate><item><title><![CDATA[Deploying a Gatsby Site to GitHub Pages Using GitHub Actions CI/CD]]></title><description><![CDATA[In this post I will talk about setting up GitHub Actions CI/CD to automatically build and deploy my Gatsby site to GitHub Pages when I push…]]></description><link>https://sk52.github.io/codewithsam/setting-up-ci-cd/</link><guid isPermaLink="false">https://sk52.github.io/codewithsam/setting-up-ci-cd/</guid><pubDate>Sun, 28 Mar 2021 15:37:00 GMT</pubDate><content:encoded>&lt;p&gt;In this post I will talk about setting up GitHub Actions CI/CD to automatically build and deploy my Gatsby site to GitHub Pages when I push any changes to the &lt;code class=&quot;language-text&quot;&gt;main&lt;/code&gt; branch. The post will cover:&lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Code with Sam]]></title><description><![CDATA[A place to document and share my learning journey.]]></description><link>https://sk52.github.io/codewithsam</link><generator>GatsbyJS</generator><lastBuildDate>Sun, 28 Mar 2021 16:20:29 GMT</lastBuildDate><item><title><![CDATA[Deploying a Gatsby Site to GitHub Pages Using GitHub Actions CI/CD]]></title><description><![CDATA[In this post I will talk about setting up GitHub Actions CI/CD to automatically build and deploy my Gatsby site to GitHub Pages when I push…]]></description><link>https://sk52.github.io/codewithsam/setting-up-ci-cd/</link><guid isPermaLink="false">https://sk52.github.io/codewithsam/setting-up-ci-cd/</guid><pubDate>Sun, 28 Mar 2021 15:37:00 GMT</pubDate><content:encoded>&lt;p&gt;In this post I will talk about setting up GitHub Actions CI/CD to automatically build and deploy my Gatsby site to GitHub Pages when I push any changes to the &lt;code class=&quot;language-text&quot;&gt;main&lt;/code&gt; branch. The post will cover:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;What I want to achieve with CI/CD, and why&lt;/li&gt;
 &lt;li&gt;How I set up CI/CD using GitHub Actions to deploy to GitHub Pages&lt;/li&gt;
@@ -11,9 +11,9 @@
 &lt;/ul&gt;
 &lt;h2&gt;How I set up CI/CD&lt;/h2&gt;
 &lt;ol&gt;
-&lt;li&gt;Firstly I installed &lt;code class=&quot;language-text&quot;&gt;gh-pages&lt;/code&gt; by running &lt;code class=&quot;language-text&quot;&gt;npm install gh-pages --save&lt;/code&gt;, this package provides a way to publish the build files to a specified branch (defaults to &lt;code class=&quot;language-text&quot;&gt;gh-pages&lt;/code&gt; branch)&lt;/li&gt;
+&lt;li&gt;Firstly install &lt;code class=&quot;language-text&quot;&gt;gh-pages&lt;/code&gt; by running &lt;code class=&quot;language-text&quot;&gt;npm install gh-pages --save&lt;/code&gt;, this package provides a way to publish the build files to a specified branch (defaults to &lt;code class=&quot;language-text&quot;&gt;gh-pages&lt;/code&gt; branch)&lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Next I created a GitHub access token, this will allow repository access from the GitHub Actions workflow, needed to push changes to the &lt;code class=&quot;language-text&quot;&gt;gh-pages&lt;/code&gt; branch for deployment.&lt;/p&gt;
+&lt;p&gt;Next, create a GitHub access token, this will allow repository access from the GitHub Actions workflow, needed to push changes to the &lt;code class=&quot;language-text&quot;&gt;gh-pages&lt;/code&gt; branch for deployment.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Navigate to GitHub -&gt; Settings -&gt; Developer Settings -&gt; Personal access tokens&lt;/li&gt;
 &lt;li&gt;Select “Generate new token”, create one which gives access to “repo” and save it with a descriptive name&lt;/li&gt;
@@ -24,7 +24,7 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Next I wrote two scripts in &lt;code class=&quot;language-text&quot;&gt;package.json&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Now write two scripts in &lt;code class=&quot;language-text&quot;&gt;package.json&lt;/code&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;&amp;quot;deploy&amp;quot;: &amp;quot;gatsby build --prefix-paths &amp;amp;&amp;amp; gh-pages -d public&amp;quot;&lt;/code&gt; - this script allows deployment to be carried out manually&lt;/li&gt;
 &lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;&amp;quot;deploy:ci&amp;quot;: &amp;quot;gatsby build --prefix-paths &amp;amp;&amp;amp; gh-pages -d public -r https://$GH_TOKEN@github.com/username/repo.git&amp;quot;&lt;/code&gt; - this script will be used by our GitHub Actions workflow, it uses the token created in the previous step&lt;/li&gt;
@@ -58,7 +58,7 @@
         &lt;span class=&quot;token key atrule&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; npm run deploy&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;ci&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ol start=&quot;5&quot;&gt;
 &lt;li&gt;Replace the example username and email with your own details in the &lt;code class=&quot;language-text&quot;&gt;.yml&lt;/code&gt; file (alternatively, if you have privacy concerns, you can set these up as GitHub secrets too following the steps used above, simply replace the email and quotation marks with something like &lt;code class=&quot;language-text&quot;&gt;$EMAIL&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;And that’s it! Commit and push the changes to your &lt;code class=&quot;language-text&quot;&gt;main&lt;/code&gt; branch and it will trigger the workflow&lt;/li&gt;
+&lt;li&gt;And that’s it! Commit and push the changes to your &lt;code class=&quot;language-text&quot;&gt;main&lt;/code&gt; branch and it will trigger the workflow and deploy to GitHub Pages&lt;/li&gt;
 &lt;/ol&gt;</content:encoded></item><item><title><![CDATA[First Post]]></title><description><![CDATA[This is the first post on my new blog. The purpose of this blog is to document and share my learning journey. In this post I will cover…]]></description><link>https://sk52.github.io/codewithsam/first-post/</link><guid isPermaLink="false">https://sk52.github.io/codewithsam/first-post/</guid><pubDate>Sat, 27 Mar 2021 16:57:00 GMT</pubDate><content:encoded>&lt;p&gt;This is the first post on my new blog.&lt;/p&gt;
 &lt;p&gt;The purpose of this blog is to document and share my learning journey. In this post I will cover:&lt;/p&gt;
 &lt;ol&gt;
