@@ -11,13 +11,14 @@ module.exports = {
       github: `sk52`,
     },
   },
+  pathPrefix: '/blog',
   plugins: [
     `gatsby-plugin-image`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/content`,
-        name: `content`,
+        path: `${__dirname}/content/blog`,
+        name: `blog`,
       },
     },
     {
