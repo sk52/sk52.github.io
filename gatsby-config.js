@@ -1,12 +1,12 @@
 module.exports = {
   siteMetadata: {
-    title: `Code with Sam`,
+    title: `Always learning`,
     author: {
       name: `Sam`,
-      summary: `who lives and works in London.`,
+      summary: `a software engineer based in London.`,
     },
     description: `A place to document and share my learning journey.`,
-    siteUrl: `https://sk52.github.io/codewithsam`,
+    siteUrl: `https://sk52.github.io/`,
     social: {
       github: `sk52`,
     },
@@ -118,7 +118,7 @@ module.exports = {
         background_color: `#ffffff`,
         theme_color: `#663399`,
         display: `minimal-ui`,
-        icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+        icon: `src/images/favicon-32x32.png`, // This path is relative to the root of the site.
       },
     },
     `gatsby-plugin-react-helmet`,
