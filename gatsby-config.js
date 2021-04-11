@@ -11,7 +11,6 @@ module.exports = {
       github: `sk52`,
     },
   },
-  pathPrefix: '/blog',
   plugins: [
     `gatsby-plugin-image`,
     {

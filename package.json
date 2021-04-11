@@ -1,5 +1,5 @@
 {
-  "name": "blog",
+  "name": "sk52.github.io",
   "private": true,
   "version": "0.1.0",
   "dependencies": {
@@ -44,8 +44,8 @@
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
-    "deploy": "gatsby build --prefix-paths && gh-pages -d public",
-    "deploy:ci": "gatsby build --prefix-paths && gh-pages -d public -r https://$GH_TOKEN@github.com/sk52/blog.git",
+    "deploy": "gatsby build && gh-pages -d public",
+    "deploy:ci": "gatsby build && gh-pages -d public -r https://$GH_TOKEN@github.com/sk52/sk52.github.io.git",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "start": "npm run develop",
     "serve": "gatsby serve",
