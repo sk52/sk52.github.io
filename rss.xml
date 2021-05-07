@@ -1,4 +1,102 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Always learning]]></title><description><![CDATA[A place to document and share my learning journey.]]></description><link>https://sk52.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Sun, 11 Apr 2021 17:51:28 GMT</lastBuildDate><item><title><![CDATA[Adding a GitHub Actions Status Badge to your README]]></title><description><![CDATA[In this post I will talk about adding a build status badge for a GitHub Actions workflow to the README of your repository. What and Why The…]]></description><link>https://sk52.github.io/adding-github-actions-badge/</link><guid isPermaLink="false">https://sk52.github.io/adding-github-actions-badge/</guid><pubDate>Sun, 11 Apr 2021 17:57:00 GMT</pubDate><content:encoded>&lt;p&gt;In this post I will talk about adding a build status badge for a GitHub Actions workflow to the README of your repository.&lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Always learning]]></title><description><![CDATA[A place to document and share my learning journey.]]></description><link>https://sk52.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Fri, 07 May 2021 15:07:44 GMT</lastBuildDate><item><title><![CDATA[Deploying a Monorepo to Heroku]]></title><description><![CDATA[If you’ve ever thought about splitting your web application into more than one microservice whilst keeping them under the same GitHub…]]></description><link>https://sk52.github.io/deploy-a-monorepo-to-heroku/</link><guid isPermaLink="false">https://sk52.github.io/deploy-a-monorepo-to-heroku/</guid><pubDate>Sat, 01 May 2021 18:28:00 GMT</pubDate><content:encoded>&lt;p&gt;If you’ve ever thought about splitting your web application into more than one microservice whilst keeping them under the same GitHub repository, you may have wondered how you can deploy each microservice to separate Heroku dynos with ease.&lt;/p&gt;
+&lt;p&gt;In this blog post I’ll show you how to achieve this for a monorepo comprising two node.js applications using the &lt;a href=&quot;https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-multi-procfile&quot;&gt;Heroku Multi-Profile Buildpack&lt;/a&gt;.&lt;/p&gt;
+&lt;h2&gt;What and Why&lt;/h2&gt;
+&lt;p&gt;Separating an application into several separate microservices has multiple benefits:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Ability to separate a large and complex application into small and manageable services&lt;/li&gt;
+&lt;li&gt;Developers can work on different parts of the application independent of each other&lt;/li&gt;
+&lt;li&gt;Scaling the application can be done on a per-service basis&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Deploying a monolithic application to Heroku is simple enough, there’s plenty of information out there which &lt;a href=&quot;https://devcenter.heroku.com/articles/getting-started-with-nodejs#set-up&quot;&gt;documents how&lt;/a&gt;. For a monorepo it gets a little more complex. Read on to find out how.&lt;/p&gt;
+&lt;h2&gt;Prerequisites&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;A heroku account (free tier works fine)&lt;/li&gt;
+&lt;li&gt;Heroku CLI&lt;/li&gt;
+&lt;li&gt;A monorepo structure containing two node.js projects as follows&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;example-app
+    --packages
+        |--client
+        |   |--package.json
+        |   |--package-lock.json
+        |
+        |--server
+            |--package.json
+            |--package-lock.json
+    --package.json
+    --package-lock.json&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;How to&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Whilst logged in to Heroku create two new apps:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;example-app&lt;/code&gt; - this will be our client application which end users access&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;example-app-server&lt;/code&gt; - this will be the server application which our client application integrates with&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;In each application on Heroku, navigate to the settings tab and scroll down to “Buildpacks”. On each application we’ll add two buildpacks:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;First, add the multi-procfile buildpack by pasting this link - &lt;code class=&quot;language-text&quot;&gt;https://github.com/heroku/heroku-buildpack-multi-procfile&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Next, add the &lt;code class=&quot;language-text&quot;&gt;heroku/nodejs&lt;/code&gt; buildpack&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Now we need to write our Procfiles and add these to their respective application folders&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;What is a Procfile? It’s a file which specifies the commands to run when starting an application. Heroku uses this to fire up your application during deployment.&lt;/li&gt;
+&lt;li&gt;In &lt;code class=&quot;language-text&quot;&gt;packages/server&lt;/code&gt; directory, run the command:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;web: cd packages/server &amp;amp;&amp;amp; node server.js&quot;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; Procfile&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;In &lt;code class=&quot;language-text&quot;&gt;packages/client&lt;/code&gt; directory, run the command&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;web: cd packages/client &amp;amp;&amp;amp; node server.js&quot;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; Procfile&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;Now we should be setup with both Procfiles which tell Heroku how to start our two applications&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Now, over in our repository we’ll need to use the Heroku CLI to specify our Profile locations, this lets Heroku know where to find the Procfiles.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;For this, we’ll use the names of our Heroku applications that we set in step 1&lt;/li&gt;
+&lt;li&gt;Run the following commands:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;heroku config:set -a example-app &lt;span class=&quot;token assign-left variable&quot;&gt;PROCFILE&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;packages/client/Procfile&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;heroku config:set -a example-app-server &lt;span class=&quot;token assign-left variable&quot;&gt;PROCFILE&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;packages/server/Procfile&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;Now Heroku knows where to find the Procfiles for our two applications&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Heroku now knows where to find our Procfiles, however, because we have two separate applications stored within the &lt;code class=&quot;language-text&quot;&gt;client&lt;/code&gt; and &lt;code class=&quot;language-text&quot;&gt;server&lt;/code&gt; directories, each has their own dependencies. Heroku typically tries to install dependencies as specified in the &lt;code class=&quot;language-text&quot;&gt;package.json&lt;/code&gt; at the root of the project, and similarly will try to run the build script specified here. To ensure we install the correct dependencies and run the correct build scripts for our application, we need to specify a &lt;code class=&quot;language-text&quot;&gt;postinstall&lt;/code&gt; script in the root of our project.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;In the &lt;code class=&quot;language-text&quot;&gt;package.json&lt;/code&gt; file in the project root, add the following scripts:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;   &lt;span class=&quot;token string&quot;&gt;&quot;scripts&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+       &lt;span class=&quot;token string&quot;&gt;&quot;postinstall&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;if [ &lt;span class=&quot;token variable&quot;&gt;$CLIENT_ENV&lt;/span&gt; ]; then npm run postinstall-client; elif [ &lt;span class=&quot;token variable&quot;&gt;$SERVER_ENV&lt;/span&gt; ]; then npm run postinstall-server; else echo no environment detected, please set CLIENT_ENV or SERVER_ENV; fi&quot;&lt;/span&gt;,
+       &lt;span class=&quot;token string&quot;&gt;&quot;postinstall-client&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;cd packages/client &amp;amp;&amp;amp; npm install &amp;amp;&amp;amp; npm run build&quot;&lt;/span&gt;,
+       &lt;span class=&quot;token string&quot;&gt;&quot;postinstall-server&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;cd packages/server &amp;amp;&amp;amp; npm install&quot;&lt;/span&gt;
+   &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;We’ve added three scripts: &lt;code class=&quot;language-text&quot;&gt;postinstall&lt;/code&gt;, &lt;code class=&quot;language-text&quot;&gt;postinstall-client&lt;/code&gt;, and &lt;code class=&quot;language-text&quot;&gt;postinstall-server&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Heroku will automatically run the &lt;code class=&quot;language-text&quot;&gt;postinstall&lt;/code&gt; script for us upon deployment&lt;/li&gt;
+&lt;li&gt;Our postinstall script looks for environment variables &lt;code class=&quot;language-text&quot;&gt;$CLIENT_ENV&lt;/code&gt; or &lt;code class=&quot;language-text&quot;&gt;$SERVER_ENV&lt;/code&gt; to determine which postinstall script to run&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Finally, we need to go into the set two environment variables in our applications on Heroku&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Go to the Settings tab and scroll to Config Vars&lt;/li&gt;
+&lt;li&gt;In the client application, add &lt;code class=&quot;language-text&quot;&gt;CLIENT_ENV=true&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;In the server application, add &lt;code class=&quot;language-text&quot;&gt;SERVER_ENV=true&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Now our postinstall script will be able to run the correct install scripts for each of our applications on deployment&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;That’s it! Everything should now be set up to deploy multiple applications versioned under a monorepo to several Heroku applications. Just set your Heroku applications up to deploy on push and you should be ready to go next time you push changes.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Thoughts&lt;/h2&gt;
+&lt;p&gt;This setup process provides a way of carrying out a monorepo deployment to Heroku whilst making use of the tools that Heroku offers. For more complex applications the deployment process may be better handled by a scripted pipeline using something like GitHub Actions. This would likely involve more steps, but could offer more control over the deployment process and gives the ability to incorporate it into a CI/CD pipeline which carries out unit testing and other quality steps.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Adding a GitHub Actions Status Badge to your README]]></title><description><![CDATA[In this post I will talk about adding a build status badge for a GitHub Actions workflow to the README of your repository. What and Why The…]]></description><link>https://sk52.github.io/adding-github-actions-badge/</link><guid isPermaLink="false">https://sk52.github.io/adding-github-actions-badge/</guid><pubDate>Sun, 11 Apr 2021 17:57:00 GMT</pubDate><content:encoded>&lt;p&gt;In this post I will talk about adding a build status badge for a GitHub Actions workflow to the README of your repository.&lt;/p&gt;
 &lt;h2&gt;What and Why&lt;/h2&gt;
 &lt;p&gt;The GitHub Actions status badge looks something like this:&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://github.com/sk52/sk52.github.io/actions/workflows/deploy.yml&quot;&gt;&lt;img src=&quot;https://github.com/sk52/sk52.github.io/actions/workflows/deploy.yml/badge.svg?branch=main&quot; alt=&quot;Build&quot;&gt;&lt;/a&gt;&lt;/p&gt;
