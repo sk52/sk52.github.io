@@ -1,4 +1,31 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Always learning]]></title><description><![CDATA[A place to document and share my learning journey.]]></description><link>https://sk52.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Tue, 24 Aug 2021 17:41:24 GMT</lastBuildDate><item><title><![CDATA[Publishing a Private Package to GitHub]]></title><description><![CDATA[Working with packages is something that is almost unavoidable in the JavaScript ecosystem, but we typically find ourselves using other…]]></description><link>https://sk52.github.io/publishing-a-private-package-to-github/</link><guid isPermaLink="false">https://sk52.github.io/publishing-a-private-package-to-github/</guid><pubDate>Tue, 24 Aug 2021 17:36:00 GMT</pubDate><content:encoded>&lt;p&gt;Working with packages is something that is almost unavoidable in the JavaScript ecosystem, but we typically find ourselves using other peoples packages as dependencies in our projects. If you’ve ever wondered how to publish a package of your own, then read on.&lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Always learning]]></title><description><![CDATA[A place to document and share my learning journey.]]></description><link>https://sk52.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Wed, 17 Nov 2021 10:42:28 GMT</lastBuildDate><item><title><![CDATA[Using console.time and console.timeEnd in JavaScript]]></title><description><![CDATA[When writing code we often try to optimise our implementations to reduce the time complexity. 
+Optimising code results a better experience…]]></description><link>https://sk52.github.io/using-console.time/</link><guid isPermaLink="false">https://sk52.github.io/using-console.time/</guid><pubDate>Wed, 17 Nov 2021 07:37:00 GMT</pubDate><content:encoded>&lt;p&gt;When writing code we often try to optimise our implementations to reduce the time complexity.
+Optimising code results a better experience for end users, as they have to wait less time for a response.
+In this post we’ll be looking at how you can use &lt;code class=&quot;language-text&quot;&gt;console.time()&lt;/code&gt; and &lt;code class=&quot;language-text&quot;&gt;console.timeEnd()&lt;/code&gt; in JavaScript to time a block of code. &lt;/p&gt;
+&lt;h2&gt;How to use console.time()&lt;/h2&gt;
+&lt;p&gt;You might be familiar with using &lt;code class=&quot;language-text&quot;&gt;console.log()&lt;/code&gt; in JavaScript to log some data. The console object also has some other methods available.
+Namely, the &lt;code class=&quot;language-text&quot;&gt;time()&lt;/code&gt; and &lt;code class=&quot;language-text&quot;&gt;timeEnd()&lt;/code&gt; methods. &lt;/p&gt;
+&lt;p&gt;To use these, simply place them before and after a block of code that you wish to time, with the same argument passed to each method call:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;const pets = [
+  {type: &amp;#39;dog&amp;#39;, name: &amp;#39;Dave&amp;#39;}, 
+  {type: &amp;#39;cat&amp;#39;, name: &amp;#39;Freddie&amp;#39;}, 
+  {type: &amp;#39;dog&amp;#39;, name: &amp;#39;Monty&amp;#39;}
+];
+
+console.time(&amp;#39;filterDogs&amp;#39;);
+
+// code block to time
+const dogs = pets.filter(pet =&amp;gt; 
+  pet.type === &amp;#39;dog&amp;#39;
+);
+
+console.timeEnd(&amp;#39;filterDogs&amp;#39;);&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The logged output will look something like this: &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;filterDogs: 0.052001953125 ms&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Summary&lt;/h2&gt;
+&lt;p&gt;It is as simple as that. Just be sure to pass the same argument into both the &lt;code class=&quot;language-text&quot;&gt;console.time()&lt;/code&gt; and &lt;code class=&quot;language-text&quot;&gt;console.timeEnd()&lt;/code&gt; methods.
+You can also use several timers in a single piece of code, either sequentially or nested.
+This can be a useful tool when assessing the performance of your code. &lt;/p&gt;</content:encoded></item><item><title><![CDATA[Publishing a Private Package to GitHub]]></title><description><![CDATA[Working with packages is something that is almost unavoidable in the JavaScript ecosystem, but we typically find ourselves using other…]]></description><link>https://sk52.github.io/publishing-a-private-package-to-github/</link><guid isPermaLink="false">https://sk52.github.io/publishing-a-private-package-to-github/</guid><pubDate>Tue, 24 Aug 2021 17:36:00 GMT</pubDate><content:encoded>&lt;p&gt;Working with packages is something that is almost unavoidable in the JavaScript ecosystem, but we typically find ourselves using other peoples packages as dependencies in our projects. If you’ve ever wondered how to publish a package of your own, then read on.&lt;/p&gt;
 &lt;h2&gt;Prerequisites&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;A GitHub account&lt;/li&gt;
