@@ -1,5 +1,6 @@
 ---
 title: Deploying a Gatsby Site to GitHub Pages Using GitHub Actions CI/CD
+tags: ['Gatsby', 'CI/CD']
 date: '2021-03-28T15:37:00.000Z'
 ---
 

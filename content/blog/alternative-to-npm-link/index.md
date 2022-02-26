@@ -1,5 +1,6 @@
 ---
 title: Alternative to NPM Link
+tags: ['NPM', 'NPM Link', 'Yalc', 'Packages']
 date: '2021-12-09T09:00:00.000Z'
 ---
 

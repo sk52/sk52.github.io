@@ -1,5 +1,6 @@
 ---
 title: Favourite Mac Tools (Setting up a Mac)
+tags: ['Mac', 'Mac Setup']
 date: '2022-02-25T21:00:00.000Z'
 ---
 

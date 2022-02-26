@@ -1,5 +1,6 @@
 ---
 title: Adding a GitHub Actions Status Badge to your README
+tags: ['GitHub Actions', 'CI/CD']
 date: '2021-04-11T17:57:00.000Z'
 ---
 

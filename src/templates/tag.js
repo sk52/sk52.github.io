@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link, graphql } from 'gatsby';
 
 import Layout from '../components/layout';
+import SEO from '../components/seo';
 
 const Tags = ({ pageContext, data, location }) => {
   const siteTitle = data.site?.siteMetadata?.title || `Title`;
@@ -14,18 +15,40 @@ const Tags = ({ pageContext, data, location }) => {
 
   return (
     <Layout location={location} title={siteTitle}>
+      <SEO title={tag} />
       <h1>{tagHeader}</h1>
-      <ul>
-        {edges.map(({ node }) => {
-          const { slug } = node.fields;
-          const { title } = node.frontmatter;
+      <ol style={{ listStyle: `none` }}>
+        {edges.map(({ node: post }) => {
+          const title = post.frontmatter.title || post.fields.slug;
+
           return (
-            <li key={slug}>
-              <Link to={slug}>{title}</Link>
+            <li key={post.fields.slug}>
+              <article
+                className="post-list-item"
+                itemScope
+                itemType="http://schema.org/Article"
+              >
+                <header>
+                  <h2>
+                    <Link to={post.fields.slug} itemProp="url">
+                      <span itemProp="headline">{title}</span>
+                    </Link>
+                  </h2>
+                  <small>{post.frontmatter.date}</small>
+                </header>
+                <section>
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: post.frontmatter.description || post.excerpt,
+                    }}
+                    itemProp="description"
+                  />
+                </section>
+              </article>
             </li>
           );
         })}
-      </ul>
+      </ol>
       <Link to="/tags">All tags</Link>
     </Layout>
   );
@@ -74,8 +97,11 @@ export const pageQuery = graphql`
           fields {
             slug
           }
+          excerpt
           frontmatter {
+            date(formatString: "MMMM DD, YYYY")
             title
+            description
           }
         }
       }
