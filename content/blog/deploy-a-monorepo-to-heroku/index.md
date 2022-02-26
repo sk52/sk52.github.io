@@ -1,5 +1,6 @@
 ---
 title: Deploying a Monorepo to Heroku
+tags: ['Heroku', 'Monorepo']
 date: '2021-05-01T18:28:00.000Z'
 ---
 

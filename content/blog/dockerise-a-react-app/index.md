@@ -1,5 +1,6 @@
 ---
 title: React Project in Docker
+tags: ['Docker', 'React']
 date: '2021-12-02T18:00:00.000Z'
 ---
 
