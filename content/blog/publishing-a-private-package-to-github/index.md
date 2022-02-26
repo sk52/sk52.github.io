@@ -1,5 +1,6 @@
 ---
 title: Publishing a Private Package to GitHub
+tags: ['Packages', 'NPM']
 date: '2021-08-24T17:36:00.000Z'
 ---
 

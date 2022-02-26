@@ -1,5 +1,6 @@
 ---
 title: Using console.time and console.timeEnd in JavaScript
+tags: ['Node.js']
 date: '2021-11-17T07:37:00.000Z'
 ---
 

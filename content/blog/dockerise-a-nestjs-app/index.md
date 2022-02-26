@@ -1,5 +1,6 @@
 ---
 title: NestJS Project in Docker
+tags: ['Docker', 'NestJS']
 date: '2022-02-03T18:00:00.000Z'
 ---
 

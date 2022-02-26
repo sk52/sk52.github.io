@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Link, graphql } from 'gatsby';
+import _ from 'lodash';
 
 import Bio from '../components/bio';
 import Layout from '../components/layout';
@@ -24,6 +25,22 @@ const BlogPostTemplate = ({ data, location }) => {
         <header>
           <h1 itemProp="headline">{post.frontmatter.title}</h1>
           <p>{post.frontmatter.date}</p>
+          <ul
+            style={{
+              display: `flex`,
+              flexWrap: `wrap`,
+              listStyle: `none`,
+              padding: 0,
+            }}
+          >
+            {post?.frontmatter?.tags?.map(tag => {
+              return (
+                <li key={`tag-${tag}`} style={{ marginRight: '6px' }}>
+                  <Link to={`/tags/${_.kebabCase(tag)}/`}>#{tag}</Link>
+                </li>
+              );
+            })}
+          </ul>
         </header>
         <section
           dangerouslySetInnerHTML={{ __html: post.html }}
@@ -83,6 +100,7 @@ export const pageQuery = graphql`
       html
       frontmatter {
         title
+        tags
         date(formatString: "MMMM DD, YYYY")
         description
       }
