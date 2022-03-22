@@ -1,2 +1,4 @@
 User-agent: *
 Disallow:
+
+Sitemap: https://sk52.github.io/sitemap.xml
